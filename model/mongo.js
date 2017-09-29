@@ -5,7 +5,9 @@ var mongoSchema =   mongoose.Schema;
 // create schema
 var userSchema  = {
     "userEmail" : String,
-    "userPassword" : String
+    "userPassword" : String,
+    "userName" : String,
+    "userAge" : String
 };
 // create model if not exists.
 module.exports = mongoose.model('userLogins',userSchema);

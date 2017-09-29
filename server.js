@@ -43,29 +43,6 @@ router.route("/users")
     });
 })
 
-/*.post(function(req,res){
-    var db = new mongoOp();
-    var response = {};
-    // fetch email and password from REST request.
-    // Add strict validation when you use this in Production.
-    db.userEmail = req.body.userEmail; 
-    // Hash the password using SHA1 algorithm.
-    db.userPassword =  require('crypto')
-                      .createHash('sha1')
-                      .update(req.body.userPassword)
-                      .digest('base64');
-    db.save(function(err){
-    // save() will run insert() command of MongoDB.
-    // it will add new data in collection.
-        if(err) {
-            response = {"error" : true,"message" : "Error adding data"};
-        } else {
-            response = {"error" : false,"message" : "Data added"};
-        }
-        res.json(response);
-    });
-});*/
-
 .post(function(req,res){
 
     mongoOp.findOne({ userEmail: req.body.userEmail}, function(err, userlogins) {
@@ -101,28 +78,6 @@ router.route("/users")
             }
         }    
     })
-
-
-    /*var db = new mongoOp();
-    var response = {};
-    // fetch email and password from REST request.
-    // Add strict validation when you use this in Production.
-    db.userEmail = req.body.userEmail; 
-    // Hash the password using SHA1 algorithm.
-    db.userPassword =  require('crypto')
-                      .createHash('sha1')
-                      .update(req.body.userPassword)
-                      .digest('base64');
-    db.save(function(err){
-    // save() will run insert() command of MongoDB.
-    // it will add new data in collection.
-        if(err) {
-            response = {"error" : true,"message" : "Error adding data"};
-        } else {
-            response = {"error" : false,"message" : "Data added"};
-        }
-        res.json(response);
-    });*/
 });
 
 router.route("/users/:id")
@@ -192,18 +147,23 @@ router.route("/users/:id")
 
 router.route("/users/login")
 .post(function(req,res){
-
-    mongoOp.findOne({ userEmail: req.body.userEmail, userPassword: req.body.userPassword }, function(err, userlogins) {
+    console.log("antes de findOne");
+    mongoOp.findOne({ 
+        userEmail: req.body.userEmail, userPassword: 
+        req.body.userPassword 
+    }, function(err, userlogins) {
+        console.log("Entrou em findOne");
         if (err) {
+            console.log("Error findOne");
             return handleError(err);
         } else {
-
+            console.log("antes de findOne");
             if(userlogins != null){
                 console.log('%s %s is a %s.', userlogins.userEmail);
-                res.json(true);
+                res.json( { resp: "true" } );
             } else {
                 console.log('usuário não encontrado!!!');
-                res.json(false);
+                res.json({ resp: "false" });
             }
         }    
     })
